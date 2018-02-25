@@ -1,5 +1,4 @@
 package httpProxy;
-
 import java.net.ServerSocket;
 
 public class HttpProxy {

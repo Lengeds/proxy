@@ -27,6 +27,7 @@ class SocketHandle extends Thread {
         try {
             clientInput = socket.getInputStream();
             clientOutput = socket.getOutputStream();
+           
             String line;
             String host = "";
             /* System.out.println(clientInput.toString()); */
@@ -38,24 +39,29 @@ class SocketHandle extends Thread {
             // 读取HTTP请求头，并拿到HOST请求头和method
             List<StringBuffer> list = new ArrayList<StringBuffer>();
             InputStreamReader in = new InputStreamReader(clientInput);
+            
             BufferedReader bf = new BufferedReader(in);
+          //  LineBuffer lineBuffer = new LineBuffer(1024);
+            int i=0;
+               
             String[] arrayStr;
             String currentLine, result;
             int port =80;
             currentLine = result = null;
-            while ((currentLine = bf.readLine()) != null) {
+           while ((currentLine = bf.readLine()) != null) {
+               System.out.println(currentLine);
                 arrayStr = currentLine.split(":");
-                System.out.println("分");   
                 if (arrayStr.length>0 && arrayStr[0].equals("Host")) { // https connection
                    if(arrayStr.length>2) {
                        host = arrayStr[1];
                        port = Integer.valueOf(arrayStr[2]);
                    }else {
                        host = arrayStr[1];
+                      // bf.
                         }
                     }
                 }
-         /*   while ((read=clientInput.read())!=-1) {
+          /*  while ((read=clientInput.read())!=-1) {
                 System.out.print((char)read);    
            
                }*/
@@ -67,12 +73,21 @@ class SocketHandle extends Thread {
           
               }
           */
-            
+            System.out.println("ceshi");
+            System.out.println(host+"  "+port);
+        /*    proxySocket=new Socket(host,port);
+            proxyInput = proxySocket.getInputStream(); 
+            proxyOutput = proxySocket.getOutputStream();
+            new ProxyHandleThread(proxyInput, proxyOutput).start();
+            while(true) {
+                clientOutput.write(proxyInput.read());
+                }*/
             /*
              * String type = headStr.substring(0, headStr.indexOf(" "));
              * //根据host头解析出目标服务器的host和port String[] hostTemp = host.split(":"); host =
              * hostTemp[0]; int port = 80; if (hostTemp.length > 1) { port =
-             * Integer.valueOf(hostTemp[1]); } //连接到目标服务器 proxySocket = new Socket(host,
+             * Integer.valueOf(hostTemp[1]); } 
+             //连接到目标服务器 proxySocket = new Socket(host,
              * port); proxyInput = proxySocket.getInputStream(); proxyOutput =
              * proxySocket.getOutputStream(); //根据HTTP method来判断是https还是http请求 if
              * ("CONNECT".equalsIgnoreCase(type)) {//https先建立隧道

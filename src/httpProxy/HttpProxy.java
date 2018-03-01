@@ -11,7 +11,7 @@ public class HttpProxy {
 				  System.out.println("启动一个线程");
 			  }
 			 
-			  
+			//  long u = 12.12121;
 			}catch(Exception e){
 				e.printStackTrace();
 			}

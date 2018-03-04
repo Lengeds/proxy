@@ -9,8 +9,10 @@ public class My{
         Socket socket = new Socket("www.baidu.com",80);
         if(socket.isConnected()) {
             System.out.println("连接上");
+        }else {
+            System.out.println("连接不上");
         }
-        StringBuffer sb = new StringBuffer("GET https://www.baidu.com/ HTTP/1.1\r\n");
+        StringBuffer sb = new StringBuffer("GET http://www.baidu.com/ HTTP/1.1\r\n");
         // 以下为请求头 
         sb.append("Host: www.baidu.com\r\n");
        // sb.append("User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0\r\n");
@@ -24,9 +26,8 @@ public class My{
         sb.append("\r\n");
        // System.out.println(sb.toString());
         try {
-            OutputStream os = socket.getOutputStream();
-           
-          os.write(sb.toString().getBytes());
+           OutputStream os = socket.getOutputStream();
+           os.write(sb.toString().getBytes());
          
             InputStream is = socket.getInputStream();
            /* ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -34,7 +35,6 @@ public class My{
             StringBuffer sbf =new StringBuffer();
             int len = 0;
             while ((len = is.read()) != -1) {
-                   
                     System.out.print((char)len);
                 sbf.append((char)len);
             }

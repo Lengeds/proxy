@@ -4,14 +4,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import javax.net.ssl.SSLSocketFactory;
+
 public class My{ 
     public static void  main(String args[]) throws Exception {
-        Socket socket = new Socket("www.baidu.com",80);
+        //Socket socket = new Socket("www.baidu.com",443);
+        Socket socket = (Socket)SSLSocketFactory.getDefault().createSocket("www.baidu.com",443);
         if(socket.isConnected()) {
             System.out.println("连接上");
         }else {
             System.out.println("连接不上");
         }
+        OutputStream os = socket.getOutputStream();
+         
         StringBuffer sb = new StringBuffer("GET http://www.baidu.com/ HTTP/1.1\r\n");
         // 以下为请求头 
         sb.append("Host: www.baidu.com\r\n");
@@ -26,7 +31,7 @@ public class My{
         sb.append("\r\n");
        // System.out.println(sb.toString());
         try {
-           OutputStream os = socket.getOutputStream();
+            
            os.write(sb.toString().getBytes());
          
             InputStream is = socket.getInputStream();

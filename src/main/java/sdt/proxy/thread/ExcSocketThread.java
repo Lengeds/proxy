@@ -1,18 +1,23 @@
 package sdt.proxy.thread;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
-import sdt.proxy.socket.SocketForClient;
+import sdt.proxy.socket.BaseSocket;
+import sdt.proxy.socket.BufferArea;
+import sdt.proxy.socket.ClientSocket;
 
 public class ExcSocketThread implements Runnable{
-    private SocketForClient sfs;
+    public BaseSocket baseSocket;
+    public ClientSocket clientSocket;
+    public BufferArea bufferArea;
     public void run() {
+        /*绑定socket的inputStream和outputStream到缓冲区(BufferArea)对应的区域,ClientSocket的inputStream和outputStream
+        *分别绑定BufferArea的read和write,ServerSocket的inputStream和outputStream分别绑定BufferArea的write和read
+        */
+        
         
      }
      
@@ -22,11 +27,12 @@ public class ExcSocketThread implements Runnable{
      public void read() {
          InputStream read = null;
          try {
-             read  = sfs.getSocket().getInputStream();
-                  
-         
+             read  = baseSocket.getSocket().getInputStream();
+                 
+                        
              InputStreamReader in = new InputStreamReader(read);
-             
+             BufferedInputStream bfIn = new BufferedInputStream(read, 1000);
+           
              BufferedReader bf = new BufferedReader(in);
            //  LineBuffer lineBuffer = new LineBuffer(1024);
              int i=0;
@@ -44,11 +50,14 @@ public class ExcSocketThread implements Runnable{
                         port = Integer.valueOf(arrayStr[2]);
                     }else {
                         host = arrayStr[1];
-                       // bf.
+                       // bf. 
                          }
                      }
                  }
+     }catch(Exception e) {
+         
      }
      
 
 }
+     }

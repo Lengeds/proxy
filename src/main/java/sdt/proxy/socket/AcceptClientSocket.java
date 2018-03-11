@@ -10,6 +10,7 @@ public class AcceptClientSocket {
              while(true) {
                    System.out.println("启动线程");
                      //new SocketHandle(serverSocket.accept()).start();
+                   serverSocket.accept();
                    System.out.println("启动一个线程");
              }
             

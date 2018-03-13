@@ -50,6 +50,7 @@ public class ExcSocketThread implements Runnable{
                         port = Integer.valueOf(arrayStr[2]);
                     }else {
                         host = arrayStr[1];
+                        
                        // bf. 
                          }
                      }

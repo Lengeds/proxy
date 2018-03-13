@@ -32,7 +32,7 @@ public void readFromBuffer(BufferArea bufferArea) {
         String host;
         int port =80;
         currentLine = result = null;
-       while (inputStream.read(bufferArea.read)!=-1) {
+       while (inputStream.read()!=-1) {
              
          //  System.out.println(currentLine);
            /* arrayStr = currentLine.split(":");

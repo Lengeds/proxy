@@ -1,6 +1,8 @@
 package sdt.proxy.socket;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class ClientSocket extends BaseSocket{
@@ -20,20 +22,32 @@ public Socket getSocket() {
 
 @Override
 public void readFromBuffer(BufferArea bufferArea) {
+	 OutputStream outputStream= null;
+	    try {
+			outputStream = getSocket().getOutputStream();
+			while(true){
+				outputStream.write(bufferArea.take());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+}
+
+
+@Override
+public void writeToBuffer(BufferArea bufferArea) {
+   
+    
     InputStream inputStream = null;
     try {
         inputStream  = getSocket().getInputStream();
        // InputStreamReader in = new InputStreamReader(read);
       /*  BufferedInputStream bfIn = new BufferedInputStream(read, 1000);
         BufferedReader bf = new BufferedReader(in);*/
-        int i=0;
-        String[] arrayStr;
-        String currentLine, result;
-        String host;
-        int port =80;
-        currentLine = result = null;
-       while (inputStream.read()!=-1) {
-    	   
+   
+        int data;
+       while ((data=inputStream.read())!=-1) {
+    	   bufferArea.add((byte)data);
              
          //  System.out.println(currentLine);
            /* arrayStr = currentLine.split(":");
@@ -50,12 +64,6 @@ public void readFromBuffer(BufferArea bufferArea) {
     }catch(Exception e) {
       e.printStackTrace();
      }
-}
-
-
-@Override
-public void writeToBuffer(BufferArea bufferArea) {
-    // TODO Auto-generated method stub
     
 }
 

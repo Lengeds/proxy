@@ -1,5 +1,8 @@
 package sdt.proxy.socket;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class ServerSocket extends BaseSocket{
@@ -29,13 +32,13 @@ public void setPort(int port) {
 
 @Override
 public void readFromBuffer(BufferArea bufferArea) {
-    // TODO Auto-generated method stub
+	
     
 }
 
 @Override
 public void writeToBuffer(BufferArea bufferArea) {
-    // TODO Auto-generated method stub
+   
     
 }
 

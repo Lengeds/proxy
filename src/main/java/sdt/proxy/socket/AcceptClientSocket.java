@@ -1,6 +1,7 @@
 package sdt.proxy.socket;
 
 import java.net.ServerSocket;
+import java.net.Socket;
 
 public class AcceptClientSocket {
      public void startMonitor() {
@@ -9,8 +10,7 @@ public class AcceptClientSocket {
            // new My().start();
              while(true) {
                    System.out.println("启动线程");
-                     //new SocketHandle(serverSocket.accept()).start();
-                   serverSocket.accept();
+                   startSocket(serverSocket.accept());
                    System.out.println("启动一个线程");
              }
             
@@ -19,4 +19,13 @@ public class AcceptClientSocket {
                    e.printStackTrace();
            }
      }
+     
+     public void startSocket(Socket socket){
+    	 BufferArea readArea = new BufferArea();
+    	 BufferArea writeArea = new BufferArea();
+    	 ClientSocket clientSocket = new ClientSocket(socket, readArea, writeArea);
+    	 HostSocket hostSocket = new HostSocket(socket, readArea, writeArea);
+     }
+     
+     
 }

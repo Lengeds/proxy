@@ -6,12 +6,15 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class ClientSocket extends BaseSocket{
-   
+	 private BufferArea readArea;
+	 private BufferArea writeArea;
   /* //the remote host and port to which socket is connected to
    private String host; 
    private int port;*/
-   public ClientSocket(Socket socket) {
+   public ClientSocket(Socket socket,BufferArea readArea,BufferArea writeArea) {
         super(socket);
+        this.readArea = readArea;
+        this.writeArea = writeArea;
         
     }
 
@@ -20,13 +23,19 @@ public Socket getSocket() {
     return getSocket();
 }
 
+public void initialize(){
+	send();
+	accept();
+}
+
+
 @Override
-public void readFromBuffer(BufferArea bufferArea) {
+public void send() {
 	 OutputStream outputStream= null;
 	    try {
 			outputStream = getSocket().getOutputStream();
 			while(true){
-				outputStream.write(bufferArea.take());
+				outputStream.write(readArea.take());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -35,31 +44,17 @@ public void readFromBuffer(BufferArea bufferArea) {
 
 
 @Override
-public void writeToBuffer(BufferArea bufferArea) {
+public void accept() {
    
     
     InputStream inputStream = null;
     try {
         inputStream  = getSocket().getInputStream();
-       // InputStreamReader in = new InputStreamReader(read);
-      /*  BufferedInputStream bfIn = new BufferedInputStream(read, 1000);
-        BufferedReader bf = new BufferedReader(in);*/
-   
+      
         int data;
        while ((data=inputStream.read())!=-1) {
-    	   bufferArea.add((byte)data);
+    	   writeArea.add((byte)data);
              
-         //  System.out.println(currentLine);
-           /* arrayStr = currentLine.split(":");
-            if (arrayStr.length>0 && arrayStr[0].equals("Host")) { // https connection
-               if(arrayStr.length>2) {
-                   host = arrayStr[1];
-                   port = Integer.valueOf(arrayStr[2]);
-               }else {
-                   host = arrayStr[1];
-                  // bf. 
-                    }
-                }*/
           }
     }catch(Exception e) {
       e.printStackTrace();

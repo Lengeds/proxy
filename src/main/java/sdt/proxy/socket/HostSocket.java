@@ -78,9 +78,9 @@ public void intitialize(){
 				}
 				
 			}//while
-			if(row==0){
+			if(row==0){ //http连接
 				setSocket(new Socket(host, port));
-			}else{
+			}else{ //https连接
 				setSocket((Socket)SSLSocketFactory.getDefault().createSocket(host,port));
 			}
 			

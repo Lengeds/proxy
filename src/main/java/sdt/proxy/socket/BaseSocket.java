@@ -10,6 +10,7 @@ public abstract class BaseSocket {
     public abstract void accept();
     public BaseSocket(Socket socket) {
         this.socket = socket;
+       
           
     }
     public Socket getSocket() {

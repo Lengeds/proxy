@@ -15,17 +15,17 @@ public class ClientSocket extends BaseSocket{
         super(socket);
         this.readArea = readArea;
         this.writeArea = writeArea;
-        
+        initialize();
     }
 
 
-public Socket getSocket() { 
+/*public Socket getSocket() { 
     return getSocket();
-}
+}*/
 
 public void initialize(){
-	send();
-	accept();
+	/*send();
+	accept();*/
 }
 
 
@@ -53,6 +53,7 @@ public void accept() {
       
         int data;
        while ((data=inputStream.read())!=-1) {
+    	//   System.out.print((char)data);
     	   writeArea.add((byte)data);
              
           }

@@ -81,7 +81,7 @@ public void intitialize(){
 			if(row==0){ //http连接
 				setSocket(new Socket(host, port));
 			}else{ //https连接
-				setSocket((Socket)SSLSocketFactory.getDefault().createSocket(host,port));
+				setSocket(SSLSocketFactory.getDefault().createSocket(host,port));
 			}
 			
 			buffer=sb.toString();
@@ -90,8 +90,8 @@ public void intitialize(){
 			e.printStackTrace();
 		}
 	    
-	    send();
-	    accept();
+	  /*  send();
+	    accept();*/
 	 
 }
 /*

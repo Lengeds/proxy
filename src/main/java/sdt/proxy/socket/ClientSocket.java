@@ -15,7 +15,7 @@ public class ClientSocket extends BaseSocket{
         super(socket);
         this.readArea = readArea;
         this.writeArea = writeArea;
-        initialize();
+       // initialize();
     }
 
 
@@ -23,14 +23,15 @@ public class ClientSocket extends BaseSocket{
     return getSocket();
 }*/
 
-public void initialize(){
-	/*send();
-	accept();*/
-}
+/*public void initialize(){
+	send();
+	accept();
+}*/
 
 
 @Override
 public void send() {
+
 	 OutputStream outputStream= null;
 	    try {
 			outputStream = getSocket().getOutputStream();
@@ -53,7 +54,7 @@ public void accept() {
       
         int data;
        while ((data=inputStream.read())!=-1) {
-    	//   System.out.print((char)data);
+    	  // System.out.print((char)data);
     	   writeArea.add((byte)data);
              
           }

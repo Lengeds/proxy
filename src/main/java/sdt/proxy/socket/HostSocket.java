@@ -54,6 +54,7 @@ public void send() {
         
         try {
                     outputStream = getSocket().getOutputStream();
+                   // System.out.println(buffer.getBytes().toString());
                     outputStream.write(buffer.getBytes());
                     while(true){
                             outputStream.write(readArea.take());
@@ -75,7 +76,7 @@ public void accept() {
 	   
 	        int data;
 	       while ((data=inputStream.read())!=-1) {
-	           System.out.print((char)data);
+	         //  System.out.print((char)data);
 	    	   writeArea.add((byte)data);
 	      
 	          }
@@ -94,21 +95,29 @@ public boolean connetHost(){
        try {
              while(true){
                    v = readArea.take();
-               //    System.out.print((char)v);
-                   temp.append(v);
-                   if(v==10){//读完一行，如果是第一行就分析是http还是https，如果不是就分析是否包含host
+                  // System.out.print(v+" ");
+                   temp.append((char)v);
+                   if(v == 10){//读完一行，如果是第一行就分析是http还是https，如果不是就分析是否包含host
+                	 //  System.out.println("读完一行"+temp.toString());
                    arrayStr = temp.toString().split(":");
                    if(arrayStr.length>0){
                          if( row==0 && arrayStr[0].equals("CONNECT")){//https连接
                              row=1;
                          }else if ( arrayStr[0].equals("Host")) { //判断是否包含“Host”
                              if(arrayStr.length>2) {
-                                 host = arrayStr[1];
-                                 port = Integer.valueOf(arrayStr[2]);
+                                 host = arrayStr[1].replaceAll(" ", "");
+                                 String a = arrayStr[2].replaceAll("\n", "").replaceAll("\r", "");
+                              /*   System.out.println("&&&&&:");
+                                 System.out.print("  "+a);
+                                 String b = a.replaceAll("\r", "");
+                                 System.out.print("  "+b);*/
+                                 port = Integer.valueOf(a);
+                                 
                              }else {
-                                 host = arrayStr[1];
+                            	 host = arrayStr[1].replaceAll(" ", "");
                                  port=(row==0?80:443);
-                                       }
+                             }
+                             System.out.println("跳出while循环");
                              break;
                                 }
                        
@@ -117,12 +126,11 @@ public boolean connetHost(){
                temp.delete(0, temp.length());
                sb.append(v);
                
-           }else{
-               temp.append(v);           
-               }
+           }
                            
            }//while
-              System.out.println("port:"+port+"      "+"host:"+host);
+             
+              System.out.println("**************port:"+port+"      "+"host:"+host);
            if(row==0){ //http连接
                            setSocket(new Socket(host, port));
            }else{ //https连接

@@ -14,12 +14,12 @@ public class HostSocket extends BaseSocket{
     private String buffer;
     private BufferArea readArea;
     private BufferArea writeArea;
- public HostSocket(Socket socket,BufferArea readArea,BufferArea writeArea) {
+ public HostSocket(BufferArea readArea,BufferArea writeArea) {
      //initialize socket for server
-	  super(socket);
-	  this.readArea = readArea;
-      this.writeArea = writeArea;
-     // intitialize();
+     super(null);
+     this.readArea = readArea;
+     this.writeArea = writeArea;  
+     intitialize();
  }
 
 public String getHost() {
@@ -38,10 +38,11 @@ public void setPort(int port) {
     this.port = port;
 }
 
-/*public void intitialize(){
-	
+public void intitialize(){
+	setSocket(connetHost());
+	//System.out.println("执行完hostSocket初始化.............");
 	 
-}*/
+}
 /*
  * 在发送数据给目标主机之前，先从缓冲区获取目标主机的ip和端口
  * (non-Javadoc)
@@ -49,22 +50,26 @@ public void setPort(int port) {
  */
 @Override
 public void send() {
-    if(connetHost()) {//在进行send操作之前，先连接上目的主机
+   // if(connetHost()) {//在进行send操作之前，先连接上目的主机
         OutputStream outputStream= null;
         
         try {
+                    //System.out.println("***********"+getSocket().isConnected()+"     "+getSocket().getRemoteSocketAddress());
                     outputStream = getSocket().getOutputStream();
-                   // System.out.println(buffer.getBytes().toString());
+                     System.out.println("发送数据给目的主机:"+buffer);
                     outputStream.write(buffer.getBytes());
                     while(true){
-                            outputStream.write(readArea.take());
+                           
+                            byte a=readArea.take();
+                            System.out.println("&&&&&&&&&&&&&&&&"+(char)a+"  "+a);
+                            outputStream.write(a);
                             
                     }
             } catch (IOException e) {
                     e.printStackTrace();
             }
 
-    }
+    //}
 	 
 }
 
@@ -75,8 +80,9 @@ public void accept() {
 	        inputStream  = getSocket().getInputStream();
 	   
 	        int data;
+	        System.out.println("返回的数据:");
 	       while ((data=inputStream.read())!=-1) {
-	         //  System.out.print((char)data);
+	         System.out.print((char)data);
 	    	   writeArea.add((byte)data);
 	      
 	          }
@@ -86,7 +92,7 @@ public void accept() {
     
 }
 
-public boolean connetHost(){
+public Socket connetHost(){
     int row=0; //row代表http连接化还是https连接
     StringBuffer sb     = new StringBuffer();
     StringBuffer temp   = new StringBuffer();
@@ -116,36 +122,38 @@ public boolean connetHost(){
                              }else {
                             	 host = arrayStr[1].replaceAll(" ", "");
                                  port=(row==0?80:443);
-                             }
-                             System.out.println("跳出while循环");
+                                       }
+                          //   System.out.println("跳出while循环");
+                             sb.append(temp);
                              break;
-                                }
+                        }//else if
                        
                           }
                sb.append(temp);
                temp.delete(0, temp.length());
-               sb.append(v);
+              /* sb.append(v);*/
                
            }
                            
            }//while
              
-              System.out.println("**************port:"+port+"      "+"host:"+host);
+         //     System.out.println("**************port:"+port+"      "+"host:"+host);
+              buffer=sb.toString();
            if(row==0){ //http连接
-                           setSocket(new Socket(host, port));
+                           return new Socket(host, port);
            }else{ //https连接
-                           setSocket(SSLSocketFactory.getDefault().createSocket(host,port));
+                           return SSLSocketFactory.getDefault().createSocket(host,port);
                }
                    
-                   buffer=sb.toString();
+                  
                    
            } catch (Exception e) {
                    e.printStackTrace();
-                   return false; 
+                   return null; 
            }
        
 
-	return true;
+	
 }
 
 

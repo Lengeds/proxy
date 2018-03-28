@@ -44,7 +44,7 @@ public class BufferArea {
 		    	 
 		      }
     		 
-    	 }else if(readCursor==0){ //当readCursor和writeCursor都为0时，take函数也会发生暂停，故需要唤醒
+    	 }else if(writeCursor== readCursor){ //当readCursor和writeCursor相等时，take函数也会发生暂停，故需要唤醒
     		 synchronized (dataArea){
     		    dataArea[writeCursor++] = data;
     		    dataArea.notifyAll(); 

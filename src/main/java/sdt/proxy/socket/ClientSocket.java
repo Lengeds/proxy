@@ -53,8 +53,9 @@ public void accept() {
         inputStream  = getSocket().getInputStream();
       
         int data;
+        System.out.println("开始向Area1写数据");
        while ((data=inputStream.read())!=-1) {
-    	  // System.out.print((char)data);
+    	  System.out.print(" "+data);
     	   writeArea.add((byte)data);
              
           }

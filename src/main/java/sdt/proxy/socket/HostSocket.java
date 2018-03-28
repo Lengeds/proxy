@@ -11,14 +11,22 @@ public class HostSocket extends BaseSocket{
   //the remote host and port to which socket is connected to
     private String host; 
     private int port;
+    private String protocolType;
+    
     private String buffer;
     private BufferArea readArea;
     private BufferArea writeArea;
- public HostSocket(BufferArea readArea,BufferArea writeArea) {
+    private OutputStream clientSocketOut;
+ public HostSocket(Socket socket, BufferArea readArea,BufferArea writeArea) {
      //initialize socket for server
-     super(null);
+     super(socket);
      this.readArea = readArea;
      this.writeArea = writeArea;  
+     try {
+		clientSocketOut = socket.getOutputStream();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
      intitialize();
  }
 
@@ -39,7 +47,24 @@ public void setPort(int port) {
 }
 
 public void intitialize(){
+	System.out.println("intitialize.................");
 	setSocket(connetHost());
+	//System.out.println("intitialize+++++++++++++++++");
+	 if(protocolType.equals("https")){//如果时https连接，发送一个状态已连接说明给客户端，否则直接发送请求头给目的主机
+		 System.out.println("....................https");
+		 byte[] results ="HTTP/1.1 200 Connection Established\r\n\r\n".getBytes();
+		 for(int i= 0;i<results.length;i++){
+			 writeArea.add(results[i]);
+			// getSocket().getOutputStream().f
+		 }
+	 }else if(protocolType.equals("http")){
+		 System.out.println("....................http");
+		 try {
+			getSocket().getOutputStream().write(buffer.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	 }
 	//System.out.println("执行完hostSocket初始化.............");
 	 
 }
@@ -55,16 +80,17 @@ public void send() {
         
         try {
                     //System.out.println("***********"+getSocket().isConnected()+"     "+getSocket().getRemoteSocketAddress());
-                    outputStream = getSocket().getOutputStream();
-                     System.out.println("发送数据给目的主机:"+buffer);
-                    outputStream.write(buffer.getBytes());
-                    while(true){
-                           
-                            byte a=readArea.take();
-                            System.out.println("&&&&&&&&&&&&&&&&"+(char)a+"  "+a);
-                            outputStream.write(a);
-                            
-                    }
+                 // if(getSocket().isConnected()){
+                	//  clientSocketOut.write("HTTP/1.1 200 Connection Established\r\n\r\n".getBytes());
+                	  outputStream = getSocket().getOutputStream();
+                      while(true){
+                              byte a=readArea.take();
+                          //    System.out.println("&&&&&&&&&&&&&&&&"+(char)a+"  "+a);
+                              outputStream.write(a);
+                              
+                      }
+                //  }
+        	     
             } catch (IOException e) {
                     e.printStackTrace();
             }
@@ -80,11 +106,11 @@ public void accept() {
 	        inputStream  = getSocket().getInputStream();
 	   
 	        int data;
-	        System.out.println("返回的数据:");
+	      //  System.out.println("返回的数据:");
 	       while ((data=inputStream.read())!=-1) {
-	         System.out.print((char)data);
+	      //   System.out.print((char)data);
 	    	   writeArea.add((byte)data);
-	      
+              	      
 	          }
 	    }catch(Exception e) {
 	      e.printStackTrace();
@@ -93,42 +119,44 @@ public void accept() {
 }
 
 public Socket connetHost(){
-    int row=0; //row代表http连接化还是https连接
+    int row=0; //row代表行数
     StringBuffer sb     = new StringBuffer();
     StringBuffer temp   = new StringBuffer();
     String[] arrayStr=null;
     byte v;
        try {
+    	   System.out.println("Area1的大小:"+readArea.writeCursor+"  "+readArea.readCursor);
              while(true){
-                   v = readArea.take();
-                  // System.out.print(v+" ");
-                   temp.append((char)v);
-                   if(v == 10){//读完一行，如果是第一行就分析是http还是https，如果不是就分析是否包含host
+                v = readArea.take();
+               // System.out.print("."+(char)v);
+                temp.append((char)v);
+                if(v == 10){//读完一行，如果是第一行就分析是http还是https，如果不是就分析是否包含host
+                	   row++;
                 	 //  System.out.println("读完一行"+temp.toString());
-                   arrayStr = temp.toString().split(":");
-                   if(arrayStr.length>0){
-                         if( row==0 && arrayStr[0].equals("CONNECT")){//https连接
-                             row=1;
-                         }else if ( arrayStr[0].equals("Host")) { //判断是否包含“Host”
-                             if(arrayStr.length>2) {
-                                 host = arrayStr[1].replaceAll(" ", "");
-                                 String a = arrayStr[2].replaceAll("\n", "").replaceAll("\r", "");
-                              /*   System.out.println("&&&&&:");
-                                 System.out.print("  "+a);
-                                 String b = a.replaceAll("\r", "");
-                                 System.out.print("  "+b);*/
-                                 port = Integer.valueOf(a);
-                                 
-                             }else {
-                            	 host = arrayStr[1].replaceAll(" ", "");
+                   if(row==1){//第一行，判断时http还是https连接
+                	   arrayStr = temp.toString().split(" ");
+                	   protocolType = arrayStr[0].equals("CONNECT")?"https":"http";
+                   }else{
+                	   arrayStr = temp.toString().split(":");
+                	   if(arrayStr.length>0){
+                           if ( arrayStr[0].equals("Host")) { //判断是否包含“Host”
+                               if(arrayStr.length>2) {
+                                   host = arrayStr[1].replaceAll(" ", "");
+                                   String a = arrayStr[2].replaceAll("\n", "").replaceAll("\r", "");
+                                   port = Integer.valueOf(a);
+                                   
+                               }else {
+                              	 host = arrayStr[1].replaceAll(" ", "");
                                  port=(row==0?80:443);
-                                       }
-                          //   System.out.println("跳出while循环");
-                             sb.append(temp);
-                             break;
-                        }//else if
-                       
-                          }
+                                         }
+                            //   System.out.println("跳出while循环");
+                               sb.append(temp);
+                               break;
+                          }//else if
+                         
+                            }
+                    }
+                  
                sb.append(temp);
                temp.delete(0, temp.length());
               /* sb.append(v);*/
@@ -137,15 +165,13 @@ public Socket connetHost(){
                            
            }//while
              
-         //     System.out.println("**************port:"+port+"      "+"host:"+host);
+             System.out.println("**************port:"+port+"      "+"host:"+host+"     "+"row:"+row+"  "+"protocolType:"+protocolType);
               buffer=sb.toString();
-           if(row==0){ //http连接
-                           return new Socket(host, port);
-           }else{ //https连接
-                           return SSLSocketFactory.getDefault().createSocket(host,port);
-               }
-                   
-                  
+       //    if(protocolType.equals("http")){ //http连接
+              return new Socket(host, port);
+         //  }else{ //https连接
+                       //    return SSLSocketFactory.getDefault().createSocket(host,port);
+           //    }
                    
            } catch (Exception e) {
                    e.printStackTrace();

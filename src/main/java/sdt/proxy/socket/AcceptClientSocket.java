@@ -47,7 +47,7 @@ public class AcceptClientSocket {
       
        
        System.out.println("start create hostsocket");
-    	 HostSocket hostSocket = new HostSocket(area1, area2);
+    	 HostSocket hostSocket = new HostSocket(socket,area1, area2);
     	
        ExcSocketThread ex3 = new ExcSocketThread();
        ex3.init(hostSocket, "send");

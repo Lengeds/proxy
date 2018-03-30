@@ -6,11 +6,12 @@ public class HttpProxy {
 	public static void main(String args[]) {
 		try {
 			  ServerSocket serverSocket = new ServerSocket(8081);
+			  int i=0;
 			// new My().start();
 			  while(true) {
-			        System.out.println("启动线程");
+			        //System.out.println("启动线程");
 				  new SocketHandle(serverSocket.accept()).start();
-				  System.out.println("启动一个线程");
+				  System.out.println("启动第"+(++i)+"个线程");
 			  }
 			 
 			  

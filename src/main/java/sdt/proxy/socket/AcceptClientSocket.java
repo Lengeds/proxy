@@ -13,10 +13,10 @@ public class AcceptClientSocket {
                  int num=0;
            // new My().start();
              while(true) {
-                   System.out.println("启动第"+(++num)+"个代理线程");
+                  
                    startSocket(serverSocket.accept());
-                   
-                   //System.out.println("启动一个线程");
+                   System.out.println("启动第"+(++num)+"个代理线程");
+                 
              }
             
              

@@ -60,7 +60,7 @@ class SocketHandle extends Thread {
             //根据HTTP method来判断是https还是http请求
             if ("CONNECT".equalsIgnoreCase(type)) {//https先建立隧道
                 clientOutput.write("HTTP/1.1 200 Connection Established\r\n\r\n".getBytes());
-                clientOutput.flush();
+              //  clientOutput.flush();
             } else {//http直接将请求头转发
                 proxyOutput.write(headStr.toString().getBytes());
             }

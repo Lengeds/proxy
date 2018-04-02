@@ -67,8 +67,11 @@ class SocketHandle extends Thread {
             //新开线程转发客户端请求至目标服务器
             new ProxyHandleThread(clientInput, proxyOutput).start();
             //转发目标服务器响应至客户端
+            int s;
             while (true) {
-                clientOutput.write(proxyInput.read());
+            	s=proxyInput.read();
+            	//System.out.print((char)s);
+                clientOutput.write(s);
             }
         } catch (IOException e) {
             e.printStackTrace();

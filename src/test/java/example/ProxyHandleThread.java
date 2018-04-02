@@ -17,7 +17,9 @@ public class ProxyHandleThread extends Thread {
     @Override
     public void run() {
         try {
+        //	int s;
             while (true) {
+            	
                 output.write(input.read());
             }
         } catch (IOException e) {

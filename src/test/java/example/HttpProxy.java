@@ -10,7 +10,7 @@ public class HttpProxy {
 			// new My().start();
 			  while(true) {
 			        //System.out.println("启动线程");
-				  new SocketHandle(serverSocket.accept()).start();
+				  new SocketHandle(serverSocket.accept(),i).start();
 				  System.out.println("启动第"+(++i)+"个线程");
 			  }
 			 

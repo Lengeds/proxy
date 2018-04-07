@@ -6,12 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 class SocketHandle extends Thread {
 
-	private Socket socket;
+        private Socket socket;
     private int number;
     public SocketHandle(Socket socket,int number) {
         this.socket = socket;
@@ -36,14 +34,14 @@ class SocketHandle extends Thread {
             //读取HTTP请求头，并拿到HOST请求头和method
           /*  int c;
             while((c=clientInput.read())!=-1){
-            	System.out.print((char)c);
+                System.out.print((char)c);
             }*/
             
             while (null != (line = bf.readLine())) {
                 System.out.println(line);
                 headStr.append(line + "\r\n");
                 if (line.length() == 0) {
-                	System.out.println("执行break！----------------------");
+                        System.out.println("执行break！----------------------");
                     break;
                 } else {
                     String[] temp = line.split(" ");
@@ -77,11 +75,11 @@ class SocketHandle extends Thread {
             //转发目标服务器响应至客户端
             int s;
             while (true) {
-            	s=proxyInput.read();
-            	/*if(number==0){
-            		System.out.print((char)s);	
-            	}*/
-            	
+                s=proxyInput.read();
+                /*if(number==0){
+                        System.out.print((char)s);      
+                }*/
+                
                 clientOutput.write(s);
             }
         } catch (IOException e) {

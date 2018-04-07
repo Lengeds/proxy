@@ -33,22 +33,23 @@ public class BufferArea {
 		      }else{ //数据没有被读完
 		    	  synchronized (dataArea){
 		    		  try {
+		    		           dataArea.notifyAll();
 		    			     dataArea.wait();
-							 writeCursor = readCursor =0;
-							 dataArea[writeCursor++] = data;
-							 dataArea.notifyAll();
-						} catch (InterruptedException e) {
+					     writeCursor = readCursor =0;
+					     dataArea[writeCursor++] = data;
+					     dataArea.notifyAll();
+					} catch (InterruptedException e) {
 							e.printStackTrace();
-						}
+					}
 				}
 		    	 
 		      }
     		 
-    	 }else if(writeCursor== readCursor){ //当readCursor和writeCursor相等时，take函数也会发生暂停，故需要唤醒
+    	 }else if(writeCursor>= readCursor){ //当readCursor和writeCursor相等时，take函数也会发生暂停，故需要唤醒
     		 synchronized (dataArea){
     		    dataArea[writeCursor++] = data;
     		    dataArea.notifyAll(); 
-    		 }
+                 }
     	 }else {
     	       dataArea[writeCursor++] = data;
     	 }
@@ -59,23 +60,40 @@ public class BufferArea {
      /**
       * get data from dataArea
       */
-     public byte take(){
+     public byte take(int bs){
     	 if(readCursor==writeCursor){//当前没有数据可读，等待缓冲区刷新数据
     		 synchronized (dataArea) {
-				try{
-					dataArea.notifyAll();
-					/*System.out.println("开始等待！");*/
-					dataArea.wait();
-					return dataArea[readCursor++];
-				}catch (Exception e) {
-					e.printStackTrace();
-				}
+    		      if(readCursor==writeCursor){
+    		         try{
+                          dataArea.notifyAll();
+                          
+                          if(bs==1)  System.out.println("************开始等待！"+readCursor+"  "+writeCursor);
+                          dataArea.wait();
+                          if(bs==1) System.out.println("************被唤醒！"+readCursor+"  "+writeCursor);
+                          return dataArea[readCursor++];
+                     }catch (Exception e) {
+                          e.printStackTrace();
+                            }
+    		        }else {
+    		              return dataArea[readCursor++]; 
+    		        }
+				
 			}
     	 }
     	
     	 return dataArea[readCursor++];
     	 
     	
+     }
+     
+     /**
+      * clear dataArea
+      */
+     public void clear() {
+      synchronized (dataArea) {
+          readCursor=0;
+          writeCursor=0;
+        }
      }
     
     

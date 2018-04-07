@@ -5,8 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import javax.net.ssl.SSLSocketFactory;
-
 public class HostSocket extends BaseSocket{
   //the remote host and port to which socket is connected to
     private String host; 
@@ -57,6 +55,8 @@ public void intitialize(){
 			 writeArea.add(results[i]);
 			// getSocket().getOutputStream().f
 		 }
+		 readArea.clear();
+		 
 	 }else if(protocolType.equals("http")){
 		 System.out.println("....................http");
 		 try {
@@ -84,7 +84,7 @@ public void send() {
                 	//  clientSocketOut.write("HTTP/1.1 200 Connection Established\r\n\r\n".getBytes());
                 	  outputStream = getSocket().getOutputStream();
                       while(true){
-                              byte a=readArea.take();
+                              byte a=readArea.take(0);
                           //    System.out.println("&&&&&&&&&&&&&&&&"+(char)a+"  "+a);
                               outputStream.write(a);
                               
@@ -127,8 +127,8 @@ public Socket connetHost(){
        try {
     	   System.out.println("Area1的大小:"+readArea.writeCursor+"  "+readArea.readCursor);
              while(true){
-                v = readArea.take();
-               // System.out.print("."+(char)v);
+                v = readArea.take(1);
+                System.out.print((char)v);
                 temp.append((char)v);
                 if(v == 10){//读完一行，如果是第一行就分析是http还是https，如果不是就分析是否包含host
                 	   row++;
@@ -146,8 +146,9 @@ public Socket connetHost(){
                                    port = Integer.valueOf(a);
                                    
                                }else {
-                              	 host = arrayStr[1].replaceAll(" ", "");
-                                 port=(row==0?80:443);
+                              	 String a = arrayStr[1].replaceAll(" ", "");
+                              	 host = a.replaceAll("\n", "").replaceAll("\r", "");
+                                     port=(protocolType.equals("http")?80:443);
                                          }
                             //   System.out.println("跳出while循环");
                                sb.append(temp);

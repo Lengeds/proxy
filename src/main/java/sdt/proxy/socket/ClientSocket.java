@@ -36,9 +36,9 @@ public void send() {
 	    try {
 			outputStream = getSocket().getOutputStream();
 			while(true){
-				byte d = readArea.take();
+				byte d = readArea.take(0);
 				outputStream.write(d);
-				System.out.print((char)d);
+			//	System.out.print((char)d);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -57,7 +57,7 @@ public void accept() {
         int data;
       //  System.out.println("开始向Area1写数据");
        while ((data=inputStream.read())!=-1) {
-    	//  System.out.print((char)data);
+    	  //System.out.print((char)data);
     	   writeArea.add((byte)data);
              
           }

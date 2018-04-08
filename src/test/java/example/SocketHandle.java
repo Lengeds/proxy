@@ -12,6 +12,7 @@ class SocketHandle extends Thread {
         private Socket socket;
     private int number;
     public SocketHandle(Socket socket,int number) {
+    	//socket.set
         this.socket = socket;
         this.number=number;
     }
@@ -38,10 +39,10 @@ class SocketHandle extends Thread {
             }*/
             
             while (null != (line = bf.readLine())) {
-                System.out.println(line);
+           //     System.out.println(line);
                 headStr.append(line + "\r\n");
                 if (line.length() == 0) {
-                        System.out.println("执行break！----------------------");
+                       // System.out.println("执行break！----------------------");
                     break;
                 } else {
                     String[] temp = line.split(" ");

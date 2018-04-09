@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import sdt.proxy.thread.ExcSocketThread;
+import sdt.proxy.thread.ThreadManager;
 
 public class SocketHandle {
 
@@ -79,13 +80,14 @@ public class SocketHandle {
             }
             
             //新开线程继续转发客户端请求至目标服务器
-            ExcSocketThread exc = new ExcSocketThread();
+           /* ExcSocketThread exc = new ExcSocketThread();
             exc.init1(hostSocket, "send",InputStream.class);
-            exc.init2(clientInput);
-            new Thread(exc).start();
-            
+            exc.init2(clientInput);*/
+           
+            ThreadManager.threadPoolExecutor.execute(ThreadManager.excSocketThread.excMethod(hostSocket,
+            		"send", new Object[]{clientInput}, InputStream.class));
             //转发目标服务器响应至客户端
-          
+             
             int s;
             while ( (s=hostInput.read())!=-1) {
                 clientOutput.write(s);

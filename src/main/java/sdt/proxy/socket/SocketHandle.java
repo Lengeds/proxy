@@ -38,7 +38,7 @@ public class SocketHandle {
             int row = 1;
             while (null != (line = bf.readLine())) {
                 headStr.append(line + "\r\n");
-                System.out.println(line);
+             //   System.out.println(line);
                 if(row==1){
                 	 String[] temp = line.split(" ");
                 	 if(temp[0].equals("CONNECT")){
@@ -67,7 +67,9 @@ public class SocketHandle {
             }
             
             //连接到目标服务器
-            System.out.println("host:"+host+"    "+"post:"+port);
+           // System.out.println("host:"+host+"    "+"post:"+port);
+       //     System.out.println(clientSocket.getSocket().getRemoteSocketAddress());
+           
             hostSocket.setSocket(new Socket(host, port));
             hostInput = hostSocket.getSocket().getInputStream();
             hostOutput = hostSocket.getSocket().getOutputStream();
@@ -84,7 +86,7 @@ public class SocketHandle {
             exc.init1(hostSocket, "send",InputStream.class);
             exc.init2(clientInput);*/
            
-            ThreadManager.threadPoolExecutor.execute(ThreadManager.excSocketThread.excMethod(hostSocket,
+            ThreadManager.ThreadPool.execute(ThreadManager.excSocketThread.excMethod(hostSocket,
             		"send", new Object[]{clientInput}, InputStream.class));
             //转发目标服务器响应至客户端
              

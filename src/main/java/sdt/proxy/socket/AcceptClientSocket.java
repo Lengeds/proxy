@@ -15,8 +15,9 @@ public class AcceptClientSocket {
              System.out.println("启动socket监听器完成............");
              long num=0;
              while(true) {
-            	 System.out.println("线程池当前有"+ThreadManager.threadPoolExecutor.getPoolSize()+"个任务在执行........");
-            	 ThreadManager.threadPoolExecutor.execute(ThreadManager.excSocketThread.excMethod(this,
+            	 System.out.println("线程池当前有"+ThreadManager.ThreadPool.getCompletedTaskCount()+"个任务完成........现在池里有"+ThreadManager.ThreadPool.getPoolSize()+"个线程....."+ThreadManager.ThreadPool.getActiveCount()+"个任务正在运行");
+            	
+            	 ThreadManager.ThreadPool.execute(ThreadManager.excSocketThread.excMethod(this,
                    		"startSocket", new Object[]{serverSocket.accept(),num++},Socket.class,long.class));
                   // startSocket(serverSocket.accept(),num++);
                    
@@ -32,7 +33,7 @@ public class AcceptClientSocket {
      public void startSocket(Socket socket,long num){
     	 System.out.println("*****收到第"+num+"个请求");
     	 SocketHandle socketHandle = new SocketHandle(socket);
-    	 ThreadManager.threadPoolExecutor.execute(ThreadManager.excSocketThread.excMethod(socketHandle,
+    	 ThreadManager.ThreadPool.execute(ThreadManager.excSocketThread.excMethod(socketHandle,
           		"run", new Object[]{}));
      }
      

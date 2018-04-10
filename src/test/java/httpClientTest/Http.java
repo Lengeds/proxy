@@ -47,7 +47,7 @@ public class Http {
                 
                 //String url = "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=测试&oq=java%E7%9A%84http%26lt%3Blient%E4%BD%BF%E7%94%A8%E7%9A%84%E6%97%B6https%E5%8D%8F%E8%AE%AE%E4%B9%88%3F&rsv_pq=a461b006000016c4&rsv_t=33a3wCs5ovkk2Vio6KGxr8pDqOplsuiegHV2Xe+KgXbwK5fkhV5nkiENGSg&rqlang=cn&rsv_enter=1&inputT=7523&rsv_sug3=51&rsv_sug1=19&rsv_sug7=100&rsv_sug2=0&rsv_sug4=8052&rsv_sug=1";
           //    String url="https://etrade.ccbfund.cn/etrading/tradereq/main.do?method=doInit&isHome=1&menuId=10000";
-            String url ="http://f11.baidu.com/it/u=163783084,157373940&fm=76";
+             String url ="http://f11.baidu.com/it/u=163783084,157373940&fm=76";
                 HttpGet httpGet = new HttpGet(url);
                 try {
                 	  //  httpGet.setHeader("Host:", " www.baidu.com:443");

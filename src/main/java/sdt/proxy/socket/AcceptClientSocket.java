@@ -1,25 +1,28 @@
 package sdt.proxy.socket;
 
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import sdt.proxy.thread.ExcSocketThread;
 import sdt.proxy.thread.ThreadManager;
 
 public class AcceptClientSocket {
     
      public void startMonitor() {
          try {
-             ServerSocket serverSocket = new ServerSocket(8081);
+             ServerSocket serverSocket = new ServerSocket(9000);
              System.out.println("启动socket监听器完成............");
              long num=0;
              while(true) {
             	 System.out.println("线程池当前有"+ThreadManager.ThreadPool.getCompletedTaskCount()+"个任务完成........现在池里有"+ThreadManager.ThreadPool.getPoolSize()+"个线程....."+ThreadManager.ThreadPool.getActiveCount()+"个任务正在运行");
             	
-            	 ThreadManager.ThreadPool.execute(ThreadManager.excSocketThread.excMethod(this,
-                   		"startSocket", new Object[]{serverSocket.accept(),num++},Socket.class,long.class));
-                  // startSocket(serverSocket.accept(),num++);
+            	 ThreadManager.ThreadPool.execute(
+            		    ThreadManager.excSocketThread.excMethod(
+            		    		this,
+                   		        "startSocket",
+                   		        new Object[]{serverSocket.accept(),num++},
+                   		        Socket.class,
+                   		        long.class)
+            		     );
                    
                  
              }

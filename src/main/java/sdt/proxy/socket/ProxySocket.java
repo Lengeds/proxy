@@ -49,7 +49,7 @@ public  class ProxySocket {
 	
 	
 	
-	public void send(InputStream in) {
+	public void send(InputStream in)  {
 
 		 OutputStream outputStream= null;
 		    try {

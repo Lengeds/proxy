@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import sdt.proxy.thread.ExcSocketThread;
 import sdt.proxy.thread.ThreadManager;
 
 public class SocketHandle {
@@ -38,7 +37,7 @@ public class SocketHandle {
             int row = 1;
             while (null != (line = bf.readLine())) {
                 headStr.append(line + "\r\n");
-             //   System.out.println(line);
+                System.out.println(line);
                 if(row==1){
                 	 String[] temp = line.split(" ");
                 	 if(temp[0].equals("CONNECT")){
@@ -68,9 +67,11 @@ public class SocketHandle {
             
             //连接到目标服务器
            // System.out.println("host:"+host+"    "+"post:"+port);
-       //     System.out.println(clientSocket.getSocket().getRemoteSocketAddress());
+            
            
             hostSocket.setSocket(new Socket(host, port));
+            
+           // System.out.println("************"+hostSocket.getSocket().getLocalPort());
             hostInput = hostSocket.getSocket().getInputStream();
             hostOutput = hostSocket.getSocket().getOutputStream();
             //根据HTTP method来判断是https还是http请求
@@ -95,7 +96,7 @@ public class SocketHandle {
                 clientOutput.write(s);
             }
         } catch (Exception e) {
-        	//System.out.println("--------------:"+socket.isClosed());
+        	System.out.println("--------------:"+clientSocket.getSocket().isClosed()+"     "+hostSocket.getSocket().isClosed());
             e.printStackTrace();
         } finally {
             if (hostInput != null) {

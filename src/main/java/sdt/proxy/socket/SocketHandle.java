@@ -68,18 +68,19 @@ public class SocketHandle {
             //连接到目标服务器
            // System.out.println("host:"+host+"    "+"post:"+port);
             
-           
-            hostSocket.setSocket(new Socket(host, port));
-            
-           // System.out.println("************"+hostSocket.getSocket().getLocalPort());
+           Socket socket = new Socket(host, port);
+            hostSocket.setSocket(socket);
+            System.out.println("************"+hostSocket.getSocket().getSoTimeout()+"       "+hostSocket.getSocket().getRemoteSocketAddress());
             hostInput = hostSocket.getSocket().getInputStream();
             hostOutput = hostSocket.getSocket().getOutputStream();
             //根据HTTP method来判断是https还是http请求
             if ("https".equals(hostSocket.getProtocolType())) {//https先建立隧道
                 clientOutput.write("HTTP/1.1 200 Connection Established\r\n\r\n".getBytes());
-              //  clientOutput.flush();
+                clientOutput.flush();
             } else {//http直接将请求头转发
             	hostOutput.write(headStr.toString().getBytes());
+            	System.out.println("发送http请求成功");
+            	
             }
             
             //新开线程继续转发客户端请求至目标服务器
@@ -92,11 +93,13 @@ public class SocketHandle {
             //转发目标服务器响应至客户端
              
             int s;
+           // System.out.println("******:"+clientSocket.getSocket().isClosed()+"     "+clientSocket.getSocket().isConnected());
             while ( (s=hostInput.read())!=-1) {
-                clientOutput.write(s);
+            	clientOutput.write(s);
             }
+           
         } catch (Exception e) {
-        	System.out.println("--------------:"+clientSocket.getSocket().isClosed()+"     "+hostSocket.getSocket().isClosed());
+        	//System.out.println("--------------:"+clientSocket.getSocket().isClosed()+"     "+hostSocket.getSocket().isClosed());
             e.printStackTrace();
         } finally {
             if (hostInput != null) {

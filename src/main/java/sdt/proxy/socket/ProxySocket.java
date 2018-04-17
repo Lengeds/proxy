@@ -55,10 +55,15 @@ public  class ProxySocket {
 		    try {
 				outputStream = getSocket().getOutputStream();
 				int s;
-				while((s=in.read())!=-1){
-					outputStream.write(s);
-		            		 
+				if(in.available()==0){
+					System.out.println("输入流无可读！");
+				}else{
+					while((s=in.read())!=-1){
+						outputStream.write(s);
+			            		 
+					}
 				}
+			
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

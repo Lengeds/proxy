@@ -37,7 +37,7 @@ public class Http {
                 // CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
                  
         //设置代理IP、端口、协议
-        HttpHost proxy = new HttpHost("159.138.3.216", 9000);
+        HttpHost proxy = new HttpHost("127.0.0.1", 9000);
        // new Host
         //把代理设置到请求配置
         RequestConfig defaultRequestConfig = RequestConfig.custom().setProxy(proxy).build();
@@ -49,6 +49,7 @@ public class Http {
           //    String url="https://etrade.ccbfund.cn/etrading/tradereq/main.do?method=doInit&isHome=1&menuId=10000";
            //  String url ="https://www.cnblogs.com/feiyun126/p/7686302.html";
                 String url = "http://www.baidu.com";
+             //   String url="http://www.google.com.hk/webhp?hl=zh-CN&sourceid=cnhp";
                 HttpGet httpGet = new HttpGet(url);
                 try {
                 	  //  httpGet.setHeader("Host:", " www.baidu.com:443");

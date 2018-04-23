@@ -35,6 +35,7 @@ public class AcceptClientSocket {
      
      public void startSocket(Socket socket,long num){
     	 System.out.println("*****收到第"+num+"个请求");
+    	/// socket.set
     	 SocketHandle socketHandle = new SocketHandle(socket);
     	 ThreadManager.ThreadPool.execute(ThreadManager.excSocketThread.excMethod(socketHandle,
           		"run", new Object[]{}));

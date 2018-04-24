@@ -44,16 +44,18 @@ public class SocketHandle {
                 	 String[] temp = line.split(" ");
                 	 if(temp[0].equals("CONNECT")){
                     	 hostSocket.setProtocolType("https");
+                    	 host = temp[1];
                      }else{
                     	 hostSocket.setProtocolType("http");
+                    	 host = temp[1];
                      }
                 	row++; 
-                }else if(line.length() != 0){
+                }/*else if(line.length() != 0){
                 	 String[] temp = line.split(" ");
                      if (temp[0].equals("Host:")) {
                          host = temp[1];
                      }
-                }else if (line.length() == 0) {
+                }*/else if (line.length() == 0) {
                     break;//读完报头
                 }
             }
@@ -65,20 +67,20 @@ public class SocketHandle {
             if (hostTemp.length > 1) {
                 port = Integer.valueOf(hostTemp[1]);
             }
-            //Sysytem
-            clientSocket.getSocket().getChannel().isOpen();
+          
+          //  clientSocket.getSocket().getChannel().isOpen();
           
            
             //连接到目标服务器
            // System.out.println("host:"+host+"    "+"post:"+port);
             Socket socket = new Socket(host, port);
             hostSocket.setSocket(socket);
-        //    System.out.println("************host:"+hostSocket.getSocket().getRemoteSocketAddress());
+           System.out.println("************host:"+hostSocket.getSocket().getRemoteSocketAddress());
             hostInput = hostSocket.getSocket().getInputStream();
             hostOutput = hostSocket.getSocket().getOutputStream();
             //根据HTTP method来判断是https还是http请求
             if ("https".equals(hostSocket.getProtocolType())) {//https先建立隧道
-              //  System.out.println("************client:"+clientSocket.getSocket().getRemoteSocketAddress());
+              System.out.println("************client:"+clientSocket.getSocket().getRemoteSocketAddress());
               //  clientOutput.
               //  clientSocket.getSocket().
             	clientOutput.write("HTTP/1.1 200 Connection Established\r\n\r\n".getBytes());
@@ -127,7 +129,7 @@ public class SocketHandle {
             }
             if (hostSocket.getSocket() != null) {
                 try {
-                	System.out.println("close clientSokect!");
+                	System.out.println("close hostSokect!");
                 	hostSocket.getSocket().close();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -149,6 +151,7 @@ public class SocketHandle {
             }
             if (clientSocket.getSocket() != null) {
                 try {
+                	System.out.println("close clientSocket");
                 	clientSocket.getSocket().close();
                 } catch (IOException e) {
                 	

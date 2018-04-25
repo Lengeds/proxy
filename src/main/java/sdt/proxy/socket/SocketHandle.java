@@ -44,18 +44,18 @@ public class SocketHandle {
                 	 String[] temp = line.split(" ");
                 	 if(temp[0].equals("CONNECT")){
                     	 hostSocket.setProtocolType("https");
-                    	 host = temp[1];
+                    	 //host = temp[1];
                      }else{
                     	 hostSocket.setProtocolType("http");
-                    	 host = temp[1];
+                    	 //host = temp[1];
                      }
                 	row++; 
-                }/*else if(line.length() != 0){
+                }else if(line.length() != 0){
                 	 String[] temp = line.split(" ");
                      if (temp[0].equals("Host:")) {
                          host = temp[1];
                      }
-                }*/else if (line.length() == 0) {
+                }else if (line.length() == 0) {
                     break;//读完报头
                 }
             }

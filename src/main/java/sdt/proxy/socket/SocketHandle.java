@@ -64,46 +64,34 @@ public class SocketHandle {
                 port = Integer.valueOf(hostTemp[1]);
             }
             
-          
-           
             //连接到目标服务器
-            System.out.println("host:"+host+"    "+"post:"+port);
-            Socket socket = new Socket("www.google.com", 80);
+         //   System.out.println("host:"+host+"    "+"post:"+port);
+            Socket socket = new Socket(host, port);
             hostSocket.setSocket(socket);
-        //    System.out.println("************host:"+hostSocket.getSocket().getSoTimeout()+"       "+hostSocket.getSocket().getRemoteSocketAddress());
+            //System.out.println("************host:"+hostSocket.getSocket().getSoTimeout()+"       "+hostSocket.getSocket().getRemoteSocketAddress());
             hostInput = hostSocket.getSocket().getInputStream();
             hostOutput = hostSocket.getSocket().getOutputStream();
             //根据HTTP method来判断是https还是http请求
             if ("https".equals(hostSocket.getProtocolType())) {//https先建立隧道
-                System.out.println("************client:"+clientSocket.getSocket().getRemoteSocketAddress());
-              //  clientOutput.
-              //  clientSocket.getSocket().
+               // System.out.println("************client:"+clientSocket.getSocket().getRemoteSocketAddress());
                 clientOutput.write("HTTP/1.1 200 Connection Established\r\n\r\n".getBytes());
                 clientOutput.flush();
             } else {//http直接将请求头转发
-                 StringBuilder strb= new StringBuilder();
-                 strb.append("GET http://www.google.com HTTP/1.1\r\n");
-                 strb.append("Host: www.google.com\r\n");
-                 strb.append("User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0\r\n");
-              //   strb.append("Proxy-Connection: keep-alive");
-                 strb.append("Connection: keep-alive\r\n\r\n");
-                 hostOutput.write(strb.toString().getBytes());
-            	//hostOutput.write(headStr.toString().getBytes());
-            	System.out.println("发送http请求成功");
+            	hostOutput.write(headStr.toString().getBytes());
+            	//System.out.println("发送http请求成功");
             	
             }
             
             //新开线程继续转发客户端请求至目标服务器
-           /* ExcSocketThread exc = new ExcSocketThread();
-            exc.init1(hostSocket, "send",InputStream.class);
-            exc.init2(clientInput);*/
+            ThreadManager.ThreadPool.execute(
+            		 ThreadManager.excSocketThread.excMethod(
+            		   hostSocket,
+            		   "send",
+            		   new Object[]{clientInput}, 
+            		   InputStream.class));
            
-          //  ThreadManager.ThreadPool.execute(ThreadManager.excSocketThread.excMethod(hostSocket,
-            //		"send", new Object[]{clientInput}, InputStream.class));
             //转发目标服务器响应至客户端
-             
             int s;
-            System.out.println("kaishijieshouqingqiu>>>>>>>>>>>>>>>>>>");
             while ( (s=hostInput.read())!=-1) {
             	System.out.print((char)s);
             	clientOutput.write(s);

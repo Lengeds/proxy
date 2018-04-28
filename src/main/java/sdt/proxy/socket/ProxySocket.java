@@ -57,6 +57,7 @@ public  class ProxySocket {
 				int s;
 				
 					while((s=in.read())!=-1){
+						System.out.print((char)s);
 						outputStream.write(s);
 			            		 
 					}

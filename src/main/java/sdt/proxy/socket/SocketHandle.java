@@ -81,7 +81,7 @@ public class SocketHandle {
             	//System.out.println("发送http请求成功");
             	
             }
-            
+           
             //新开线程继续转发客户端请求至目标服务器
             ThreadManager.ThreadPool.execute(
             		 ThreadManager.excSocketThread.excMethod(
@@ -91,12 +91,12 @@ public class SocketHandle {
             		   InputStream.class));
            
             //转发目标服务器响应至客户端
-            int s;
+           int s;
             while ( (s=hostInput.read())!=-1) {
             	System.out.print((char)s);
-            	clientOutput.write(s);
+            	//clientOutput.write(s);
             }
-           
+          
         } catch (Exception e) {
        /* 	System.out.println("********************:"+clientSocket.getSocket().isClosed()+"     "+clientSocket.getSocket().isConnected()
         			+"      "+clientSocket.getSocket().isInputShutdown()+"      "+clientSocket.getSocket().isOutputShutdown()
@@ -120,7 +120,7 @@ public class SocketHandle {
             }
             if (hostSocket.getSocket() != null) {
                 try {
-                	System.out.println("close clientSokect!");
+                	System.out.println("close hostSokect!");
                 	hostSocket.getSocket().close();
                 } catch (IOException e) {
                     e.printStackTrace();

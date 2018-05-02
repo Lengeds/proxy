@@ -8,8 +8,7 @@ import java.net.Socket;
 public  class ProxySocket {
 	
 	private Socket socket;
-	private String host; 
-	private int port;
+
 	private String protocolType;
    
     
@@ -28,18 +27,7 @@ public  class ProxySocket {
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
-	public String getHost() {
-		return host;
-	}
-	public void setHost(String host) {
-		this.host = host;
-	}
-	public int getPort() {
-		return port;
-	}
-	public void setPort(int port) {
-		this.port = port;
-	}
+	
 	public String getProtocolType() {
 		return protocolType;
 	}

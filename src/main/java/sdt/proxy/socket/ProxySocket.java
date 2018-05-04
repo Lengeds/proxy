@@ -5,12 +5,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import sdt.proxy.encryption.HalfMode;
+import sdt.proxy.encryption.Mode;
+
 public  class ProxySocket {
 	
 	private Socket socket;
 
 	private String protocolType;
-   
+	private Mode<Integer> halfMode = new HalfMode();
     
     public ProxySocket(){
     	
@@ -46,7 +49,8 @@ public  class ProxySocket {
 				
 					while((s=in.read())!=-1){
 						//System.out.print(s+" ");
-						outputStream.write(s);
+						//System.out.print(halfMode.decrypt(s)+" ");
+						outputStream.write(halfMode.decrypt(s));
 			            		 
 					}
 				

@@ -9,7 +9,7 @@ public class AcceptClientSocket {
     
      public void startMonitor() {
          try {
-             ServerSocket serverSocket = new ServerSocket(8000);
+             ServerSocket serverSocket = new ServerSocket(9000);
              System.out.println("启动socket监听器完成............");
              long num=0;
              while(true) {

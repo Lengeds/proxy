@@ -1,9 +1,7 @@
 package sdt.proxy.socket;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
@@ -34,41 +32,47 @@ public class SocketHandle {
             clientOutput = clientSocket.getSocket().getOutputStream();
             String line;
             String host = "";
-            InputStreamReader in = new InputStreamReader(clientInput);
-            BufferedReader bf = new BufferedReader(in);
-            StringBuilder headStr = new StringBuilder();
+         /*   InputStreamReader in = new InputStreamReader(clientInput);
+            BufferedReader bf = new BufferedReader(in);*/
+            StringBuilder headStr = new StringBuilder(1024);
+            StringBuilder sb = new StringBuilder();
             int row = 1;
-            while (null != (line = bf.readLine())) {
-            	StringBuilder decriptStr = new StringBuilder();
-            	for(int i=0;i<line.length();i++){ //解密
-            		System.out.print((int)line.charAt(i)+" ");
-            		int ds = halfMode.decrypt(line.codePointAt(i));
-            		//System.out.print(ds+" ");
-            		decriptStr.append((char)ds);
-            	}
-                headStr.append(decriptStr+"\r\n");
-              //  System.out.println(decriptStr);
-                if(row==1){
-                	 String[] temp = decriptStr.toString().split(" ");
-                	 if(temp[0].equals("CONNECT")){
-                    	 hostSocket.setProtocolType("https");
-                     }else{
-                    	 hostSocket.setProtocolType("http");
+            int encrpt,decrypt;
+            while((encrpt=clientInput.read())!=-1) {
+                decrypt = halfMode.decrypt(encrpt);
+                //System.out.print();
+                sb.append((char)decrypt);
+                if(decrypt==10) {//读完一行
+                    System.out.print(sb);
+                   headStr.append(sb);
+                   if(row==1){//如果是第一行就分析是http连接还是https
+                       String[] temp = sb.toString().split(" ");
+                       if(temp[0].equals("CONNECT")){
+                           hostSocket.setProtocolType("https");
+                       }else{
+                           hostSocket.setProtocolType("http");
+                               }
+                       row++;
+                   }else{
+                       String[] temp = sb.toString().split(" ");
+                       if (temp[0].equals("Host:")) {
+                           host = temp[1].split("\r\n")[0];//曲调换行符
+                              }
+                         }
+                   if(sb.length()==2) {//读完http头
+                             break;
+                         }
+                   sb.delete(0, sb.length());
                      }
-                	row++; 
-                }else if(decriptStr.length() != 0){
-                	 String[] temp = line.split(" ");
-                     if (temp[0].equals("Host:")) {
-                         host = temp[1];
-                     }
-                }else if (decriptStr.length() == 0) {
-                    break;//读完报头
+                     
                 }
-            }
+          
            //  hostSocket.setProtocolType();  = headStr.substring(0, headStr.indexOf(" "));
             //根据host头解析出目标服务器的host和port
             String[] hostTemp = host.split(":");
+            
             host = hostTemp[0];
+         //   System.out.println("主机:"+host);
             int port = 80;
             if (hostTemp.length > 1) {
                 port = Integer.valueOf(hostTemp[1]);
@@ -84,13 +88,17 @@ public class SocketHandle {
             //根据HTTP method来判断是https还是http请求
             if ("https".equals(hostSocket.getProtocolType())) {//https先建立隧道
                // System.out.println("************client:"+clientSocket.getSocket().getRemoteSocketAddress());
-                String responeOk = "HTTP/1.1 200 Connection Established\r\n\r\n";
+                String str= "HTTP/1.1 200 Connection Established\r\n\r\n";
+                byte[] responeOk;
+                responeOk = str.getBytes();
                 StringBuilder encriptStr = new StringBuilder();
-            	for(int i=0;i<responeOk.length();i++){ //解密
-            		int ds = halfMode.encrypt(responeOk.codePointAt(i));
-            		encriptStr.append((char)ds);
+            	for(int i=0;i<responeOk.length;i++){ //加密
+            		int ds = halfMode.encrypt((int)responeOk[i]);
+            		 clientOutput.write(ds);
             	}
-            	clientOutput.write("encriptStr".getBytes());
+            	    // System.out.println("返回："+encriptStr.getBytes());
+                //clientOutput.write(encriptStr.toString().getBytes());
+                     
                 clientOutput.flush();
             } else {//http直接将请求头转发
             	hostOutput.write(headStr.toString().getBytes());
@@ -110,7 +118,7 @@ public class SocketHandle {
            int s;
             while ( (s=hostInput.read())!=-1) {
             	
-            	System.out.print((char)s);
+            	//System.out.print((char)s);
             	clientOutput.write(halfMode.encrypt(s));
             }
           

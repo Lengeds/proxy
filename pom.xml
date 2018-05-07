@@ -81,7 +81,7 @@
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
                             <!-- jar启动入口类-->
-                            <mainClass>Stater</mainClass>
+                            <mainClass>Starter</mainClass>
                         </manifest>
                         <manifestEntries>
                             <!-- 在Class-Path下添加配置文件的路径 -->
@@ -106,7 +106,7 @@
                     <archive>
                         <manifest>
                             <!-- 此处指定main方法入口的class -->
-                            <mainClass>Stater</mainClass>
+                            <mainClass>Starter</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

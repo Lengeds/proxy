@@ -1,9 +1,12 @@
 package sdt.proxy.socket;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.Charset;
 
 import sdt.proxy.encryption.HalfMode;
 import sdt.proxy.encryption.Mode;
@@ -32,8 +35,8 @@ public class SocketHandle {
             clientOutput = clientSocket.getSocket().getOutputStream();
             String line;
             String host = "";
-         /*   InputStreamReader in = new InputStreamReader(clientInput);
-            BufferedReader bf = new BufferedReader(in);*/
+           InputStreamReader in = new InputStreamReader(clientInput);
+            BufferedReader bf = new BufferedReader(in);
             StringBuilder headStr = new StringBuilder(1024);
             StringBuilder sb = new StringBuilder();
             int row = 1;
@@ -43,7 +46,7 @@ public class SocketHandle {
                 //System.out.print();
                 sb.append((char)decrypt);
                 if(decrypt==10) {//读完一行
-                    System.out.print(sb);
+                    //System.out.print(sb);
                    headStr.append(sb);
                    if(row==1){//如果是第一行就分析是http连接还是https
                        String[] temp = sb.toString().split(" ");

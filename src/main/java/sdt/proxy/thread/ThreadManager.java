@@ -16,7 +16,7 @@ public class ThreadManager {
 				maximumPoolSize,
 	            keepLiveTime,
 	            unit,
-	            new ArrayBlockingQueue<Runnable>(0));
+	            new ArrayBlockingQueue<Runnable>(1));
 		
 		excSocketThread = new ExcSocketThread();
 		

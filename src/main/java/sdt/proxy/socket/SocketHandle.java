@@ -40,11 +40,16 @@ public class SocketHandle {
             StringBuilder headStr = new StringBuilder(1024);
             StringBuilder sb = new StringBuilder();
             int row = 1;
-            int encrpt,decrypt;
-            while((encrpt=clientInput.read())!=-1) {
-                decrypt = halfMode.decrypt(encrpt);
-                //System.out.print();
-                sb.append((char)decrypt);
+            int encrypt,decrypt;
+            while((encrypt=clientInput.read())!=-1) {
+            	//decrypt = halfMode.decrypt(encrpt);
+                System.out.print(encrypt+" ");
+                if(encrypt==10){
+                	System.out.println("");
+                }
+                /*     sb.append((char)decrypt);
+                
+              
                 if(decrypt==10) {//读完一行
                     //System.out.print(sb);
                    headStr.append(sb);
@@ -66,7 +71,7 @@ public class SocketHandle {
                              break;
                          }
                    sb.delete(0, sb.length());
-                     }
+                   }*/
                      
                 }
           

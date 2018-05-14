@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.charset.Charset;
 
 import sdt.proxy.encryption.HalfMode;
 import sdt.proxy.encryption.Mode;
@@ -42,14 +41,9 @@ public class SocketHandle {
             int row = 1;
             int encrypt,decrypt;
             while((encrypt=clientInput.read())!=-1) {
-            	//decrypt = halfMode.decrypt(encrpt);
-                System.out.print(encrypt+" ");
-                if(encrypt==10){
-                	System.out.println("");
-                }
-                /*     sb.append((char)decrypt);
-                
-              
+            	decrypt = halfMode.decrypt(encrypt);
+                //System.out.print(encrypt+" ");
+                sb.append((char)decrypt);
                 if(decrypt==10) {//读完一行
                     //System.out.print(sb);
                    headStr.append(sb);
@@ -71,7 +65,7 @@ public class SocketHandle {
                              break;
                          }
                    sb.delete(0, sb.length());
-                   }*/
+                   }
                      
                 }
           

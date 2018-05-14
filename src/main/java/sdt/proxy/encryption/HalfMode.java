@@ -24,8 +24,8 @@ public class HalfMode extends Mode<Integer>{
     private Integer exchange(Integer b){
     	Integer result;
     	int temp[]=new int[14];
-		//第一次交换，以整个字节为操作对象，高四位和低四位交换
-		temp[0]=(b<<ex[0])&(0xf0);
+        //第一次交换，以整个字节为操作对象，高四位和低四位交换
+      temp[0]=(b<<ex[0])&(0xf0);
     	temp[1]=(b>>ex[0])&(0x0f);
     	//第二次交换，，以第一操作得到的两个结果为操作对象，高二位和低二位交换
     	temp[2] = (temp[0]<<ex[1])&(0xc0);
@@ -41,8 +41,7 @@ public class HalfMode extends Mode<Integer>{
     	temp[11] = (temp[4]>>ex[2])&(0x04);
     	temp[12] = (temp[5]<<ex[2])&(0x02);
     	temp[13] = (temp[5]>>ex[2])&(0x01);
-    	
-    	 result= (temp[6]|temp[7]|temp[8]|temp[9]|temp[10]|temp[11]|temp[12]|temp[13]);
+    	result= (temp[6]|temp[7]|temp[8]|temp[9]|temp[10]|temp[11]|temp[12]|temp[13]);
     	return result;
     }  
     

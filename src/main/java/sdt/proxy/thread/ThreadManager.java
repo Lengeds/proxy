@@ -1,6 +1,6 @@
 package sdt.proxy.thread;
 
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +16,7 @@ public class ThreadManager {
 				maximumPoolSize,
 	            keepLiveTime,
 	            unit,
-	            new ArrayBlockingQueue<Runnable>(1));
+	            new SynchronousQueue<Runnable>());
 		
 		excSocketThread = new ExcSocketThread();
 		

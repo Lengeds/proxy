@@ -60,7 +60,11 @@
                 <configuration>  
                    <source>1.8</source>  
                    <target>1.8</target>  
-                   
+                   <compilerArguments>
+                     <extdirs>
+                     ${project.basedir}/lib
+                     </extdirs>
+                   </compilerArguments>   
                 </configuration>  
         </plugin>
         

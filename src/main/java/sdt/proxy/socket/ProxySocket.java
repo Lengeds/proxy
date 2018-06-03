@@ -14,7 +14,7 @@ public  class ProxySocket {
 
 	private String protocolType;
 	private Mode<Integer> halfMode = new HalfMode();
-    
+        public String connectHostName;
     public ProxySocket(){
     	
     }
@@ -46,13 +46,22 @@ public  class ProxySocket {
 		    try {
 				outputStream = getSocket().getOutputStream();
 				int s;
-				
-					while((s=in.read())!=-1){
-						//System.out.print(s+" ");
-						//System.out.print(halfMode.decrypt(s)+" ");
-						outputStream.write(halfMode.decrypt(s));
-			            		 
-					}
+				//if(connectHostName.equals("astro.fashion.qq.com")) {
+				    System.out.println("****************************");
+				    while((s=in.read())!=-1){
+                                         int k = halfMode.decrypt(s);
+				                 System.out.print((char)k);
+                                         outputStream.write(k);
+                                         
+                                     }
+				//}
+		            /*else {
+				    while((s=in.read())!=-1){
+                                        outputStream.write(halfMode.decrypt(s));
+                                         
+                                     }
+				}*/
+					
 				
 			
 			} catch (IOException e) {

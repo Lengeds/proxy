@@ -58,7 +58,7 @@ public class SocketHandle {
                    }else{
                        String[] temp = sb.toString().split(" ");
                        if (temp[0].equals("Host:")) {
-                           host = temp[1].split("\r\n")[0];//曲调换行符
+                           host = temp[1].split("\r\n")[0];//去掉换行符
                               }
                          }
                    if(sb.length()==2) {//读完http头
@@ -84,12 +84,11 @@ public class SocketHandle {
          //   System.out.println("host:"+host+"    "+"post:"+port);
             Socket socket = new Socket(host, port);
             hostSocket.setSocket(socket);
-            //System.out.println("************host:"+hostSocket.getSocket().getSoTimeout()+"       "+hostSocket.getSocket().getRemoteSocketAddress());
+            hostSocket.connectHostName = host;
             hostInput = hostSocket.getSocket().getInputStream();
             hostOutput = hostSocket.getSocket().getOutputStream();
             //根据HTTP method来判断是https还是http请求
             if ("https".equals(hostSocket.getProtocolType())) {//https先建立隧道
-               // System.out.println("************client:"+clientSocket.getSocket().getRemoteSocketAddress());
                 String str= "HTTP/1.1 200 Connection Established\r\n\r\n";
                 byte[] responeOk;
                 responeOk = str.getBytes();
@@ -103,6 +102,10 @@ public class SocketHandle {
                      
                 clientOutput.flush();
             } else {//http直接将请求头转发
+                  /* if(host.equals("astro.fashion.qq.com")) {
+                       System.out.println(headStr.toString());
+                         }*/
+                   
             	hostOutput.write(headStr.toString().getBytes());
             	//System.out.println("发送http请求成功");
             	
@@ -119,8 +122,9 @@ public class SocketHandle {
             //转发目标服务器响应至客户端
            int s;
             while ( (s=hostInput.read())!=-1) {
-            	
+                
             	//System.out.print((char)s);
+                        
             	clientOutput.write(halfMode.encrypt(s));
             }
           

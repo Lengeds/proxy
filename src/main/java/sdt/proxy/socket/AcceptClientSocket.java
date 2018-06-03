@@ -12,13 +12,13 @@ public class AcceptClientSocket {
              ServerSocket serverSocket = new ServerSocket(9000);
              System.out.println("代理服务器启动socket监听器完成...........");
              Long num=(long)0;
-             Socket socket = serverSocket.accept();
+             
              while(true) {
-            	 System.out.println("线程池当前有"+ThreadManager.ThreadPool.getCompletedTaskCount()+"个任务完成........现在池里有"+ThreadManager.ThreadPool.getPoolSize()+"个线程....."+ThreadManager.ThreadPool.getActiveCount()+"个任务正在运行");
-            
+            	System.out.println("线程池当前有"+ThreadManager.ThreadPool.getCompletedTaskCount()+"个任务完成........现在池里有"+ThreadManager.ThreadPool.getPoolSize()+"个线程....."+ThreadManager.ThreadPool.getActiveCount()+"个任务正在运行");
+            	Socket socket = serverSocket.accept();
             	 ThreadManager.ThreadPool.execute(new Thread(()->{
             		 try{
-            			 startSocket(socket,num); 
+            		   startSocket(socket,num); 
             		 }catch (Exception e) {
             			 e.printStackTrace();
 					}

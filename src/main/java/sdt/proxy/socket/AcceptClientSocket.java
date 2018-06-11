@@ -31,14 +31,13 @@ public class AcceptClientSocket {
            }catch(Exception e){
                    e.printStackTrace();
            }
+         
      }
      
      public void startSocket(Socket socket,Long num){
     	 System.out.println("*****收到第"+num+"个请求");
     	 num++;
     	 SocketHandle socketHandle = new SocketHandle(socket);
-    	/* ThreadManager.ThreadPool.execute(ThreadManager.excSocketThread.excMethod(socketHandle,
-          		"run", new Object[]{}));*/
     	 ThreadManager.ThreadPool.execute(new Thread(()->{
     		 socketHandle.run();
     	 }));

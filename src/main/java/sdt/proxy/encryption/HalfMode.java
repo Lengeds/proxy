@@ -1,6 +1,7 @@
 package sdt.proxy.encryption;
 /*
  * 使用二分法置换进行加密和解密,解密和加密都是三次置换，操作对象是一个字节
+ * 由于java没有unsigned 基本数据类型，故用int代替byte；
  */
 public class HalfMode extends Mode<Integer>{
 	//置换次数

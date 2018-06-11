@@ -46,22 +46,12 @@ public  class ProxySocket {
 		    try {
 				outputStream = getSocket().getOutputStream();
 				int s;
-				//if(connectHostName.equals("astro.fashion.qq.com")) {
-				    System.out.println("****************************");
 				    while((s=in.read())!=-1){
-                                         int k = halfMode.decrypt(s);
-				                 System.out.print((char)k);
-                                         outputStream.write(k);
+                                         outputStream.write(halfMode.decrypt(s));
                                          
-                                     }
-				//}
-		            /*else {
-				    while((s=in.read())!=-1){
-                                        outputStream.write(halfMode.decrypt(s));
-                                         
-                                     }
-				}*/
+                                     }				
 					
+				    
 				
 			
 			} catch (IOException e) {

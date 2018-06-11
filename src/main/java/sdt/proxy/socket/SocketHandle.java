@@ -69,7 +69,6 @@ public class SocketHandle {
                      
                 }
           
-           //  hostSocket.setProtocolType();  = headStr.substring(0, headStr.indexOf(" "));
             //根据host头解析出目标服务器的host和port
             String[] hostTemp = host.split(":");
             
@@ -97,27 +96,18 @@ public class SocketHandle {
             		int ds = halfMode.encrypt((int)responeOk[i]);
             		 clientOutput.write(ds);
             	}
-            	    // System.out.println("返回："+encriptStr.getBytes());
-                //clientOutput.write(encriptStr.toString().getBytes());
                      
                 clientOutput.flush();
             } else {//http直接将请求头转发
-                  /* if(host.equals("astro.fashion.qq.com")) {
-                       System.out.println(headStr.toString());
-                         }*/
-                   
             	hostOutput.write(headStr.toString().getBytes());
-            	//System.out.println("发送http请求成功");
             	
             }
            
             //新开线程继续转发客户端请求至目标服务器
-            ThreadManager.ThreadPool.execute(
-            		 ThreadManager.excSocketThread.excMethod(
-            		   hostSocket,
-            		   "send",
-            		   new Object[]{clientInput}, 
-            		   InputStream.class));
+            ThreadManager.ThreadPool.execute(new Thread(()->{
+                        hostSocket.send(clientInput);
+                 }));
+           
            
             //转发目标服务器响应至客户端
            int s;
@@ -129,9 +119,7 @@ public class SocketHandle {
             }
           
         } catch (Exception e) {
-       /* 	System.out.println("********************:"+clientSocket.getSocket().isClosed()+"     "+clientSocket.getSocket().isConnected()
-        			+"      "+clientSocket.getSocket().isInputShutdown()+"      "+clientSocket.getSocket().isOutputShutdown()
-        			);*/
+      
         	System.out.print("Exception catch:");
         	e.printStackTrace();
         } finally {

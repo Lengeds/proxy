@@ -10,7 +10,7 @@ public class ThreadManager {
 	public static  long keepLiveTime;
 	public static  TimeUnit unit;*/
 	public static  ThreadPoolExecutor ThreadPool ;
-	public static ExcSocketThread excSocketThread;
+	//public static ExcSocketThread excSocketThread;
 	public static void init(int corePoolSize,int maximumPoolSize,long keepLiveTime,TimeUnit unit){
 		ThreadPool = new ThreadPoolExecutor(corePoolSize, 
 				maximumPoolSize,
@@ -18,7 +18,7 @@ public class ThreadManager {
 	            unit,
 	            new SynchronousQueue<Runnable>());
 		
-		excSocketThread = new ExcSocketThread();
+		//excSocketThread = new ExcSocketThread();
 		
 	}
 	
